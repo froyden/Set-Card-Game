@@ -1,0 +1,61 @@
+BONUS CHALLENGE FORM
+--------------------
+
+For each bonus challenge you have implemented, please replace the sentence "We are not entitled to this bonus."
+with a short description of:
+
+1. How it was implemented in your code
+2. Where it was used (in which class methods).
+3. How you tested that it is working correctly.
+
+--------------------
+
+1. Fully supporting all configuration fields and avoiding the use of magic numbers
+
+a.  We made sure to use all the settings from config.properties and got rid of any hard-coded numbers by setting up constants or pulling straight from the config.
+    This way, our code's super flexible and way easier to tweak.
+
+b.  This approach is applied throughout the entire project
+
+c.  This was tested by changing all of the config values in config.properties observing the expected changes in gameplay and UI behavior accordingly.
+
+--------------------
+
+2. Terminating all threads (that you created) gracefully and in reverse order to the order they were created in.
+
+a.  a. We managed thread lifecycle by maintaining a collection of player threads within the Dealer class.
+We initiate threads sequentially and ensure their graceful termination in reverse creation order by employing
+synchronized blocks and condition variables for smooth shutdown coordination.
+
+b.  This strategy is particularly evident in the Dealer's run() and terminate() methods,
+    and also in the corresponding Player methods where termination happens.
+    Moreover, we only terminated our threads gracefully using join(), in order to maintain a proper finish to the run.
+
+c.  By monitoring thread behaviour, start and termination order via the log and by debugging using VS Code debugger.
+
+--------------------
+
+3. Handling the config.turnTimeoutMillis value as follows:
+config.turnTimeoutMillis < 0: display nothing.
+config.turnTimeoutMillis = 0: display a timer since the last action (reshuffle or set collected).
+Note: in modes without a countdown timer the dealer must ensure there is always at least one legal set on the table.
+
+We are not entitled to this bonus.
+
+--------------------
+
+4. Making sure that the threads do not wake up unless some actual job needs to be done (e.g., a value needs to be
+changed on the display, key input needs to be handled, etc.) and the only threads created by you are:
+1 thread per player + 1 additional thread for non-human players.
+
+a.  Used condition variables and shared locks to minimize thread wake-ups, ensuring threads are only active when required,
+    such as for UI updates or handling player actions.
+    These allowed threads to wait until a certain condition is met before proceeding, preventing unnecessary wake-ups.
+
+b.  We made sure to follow this principle throughout the codebase, especially in methods where threads might wake up needlessly.
+    For example, in functions related to player actions or timer updates, we only woke up threads when essential,
+    for example when we need timer updates, set checks, or point/penalty assignments.
+
+c. We tested the implementation by observing thread behavior during runtime. We used debugging techniques,
+    such as adding print statements or logging documentation and thread monitoring, to verify that threads were waking up only when necessary.
+    Additionally, we ran some problematic potential scenarios to make sure no bugs or excess waking up occur.
